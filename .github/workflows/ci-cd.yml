@@ -42,7 +42,7 @@ jobs:
           dotnet-version: '10.0.x'
 
       - name: Ejecutar Tests Unitarios y de Clean Architecture (xUnit)
-        run: dotnet test backend/Books.sln --configuration Release
+        run: dotnet test backend/ --configuration Release
 
   ti-gatekeeper-frontend:
     name: "Filtro TI: Frontend Tests & Build (React + TS)"
@@ -111,7 +111,7 @@ jobs:
           service: books-api
           region: ${{ env.REGION }}
           image: ${{ env.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY }}/books-api:${{ github.sha }}
-          secrets: ConnectionStrings__DefaultConnection=db-connection-string:latest
+          secrets: ConnectionStrings__DefaultConnection=db-connection-string-qa:latest
           flags: --allow-unauthenticated --port=8080
 
       - name: Build and Push Frontend Image (QA)
@@ -164,7 +164,7 @@ jobs:
           service: books-api-prod
           region: ${{ env.REGION }}
           image: ${{ needs.deploy-qa.outputs.backend_image }}
-          secrets: ConnectionStrings__DefaultConnection=db-connection-string:latest
+          secrets: ConnectionStrings__DefaultConnection=db-connection-string-prod:latest
           flags: --allow-unauthenticated --port=8080
 
       - name: Build and Push Frontend Image (Production)
