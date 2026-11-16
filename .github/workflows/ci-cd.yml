@@ -82,7 +82,7 @@ jobs:
       name: qa
       url: ${{ steps.deploy-web-qa.outputs.url }}
     outputs:
-      backend_image: ${{ env.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY }}/books-api:${{ github.sha }}
+      backend_image: ${{ env.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY }}/${{ github.event.repository.name }}-api:${{ github.sha }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -100,35 +100,35 @@ jobs:
 
       - name: Build and Push Backend Image
         run: |
-          IMAGE="${{ env.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY }}/books-api:${{ github.sha }}"
+          IMAGE="${{ env.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY }}/${{ github.event.repository.name }}-api:${{ github.sha }}"
           docker build -t "$IMAGE" ./backend
           docker push "$IMAGE"
 
-      - name: Deploy Backend (books-api) to Cloud Run QA
+      - name: Deploy Backend to Cloud Run QA
         id: deploy-api-qa
         uses: google-github-actions/deploy-cloudrun@v2
         with:
-          service: books-api
+          service: ${{ github.event.repository.name }}-api-qa
           region: ${{ env.REGION }}
-          image: ${{ env.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY }}/books-api:${{ github.sha }}
+          image: ${{ env.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY }}/${{ github.event.repository.name }}-api:${{ github.sha }}
           secrets: ConnectionStrings__DefaultConnection=db-connection-string-qa:latest
           flags: --allow-unauthenticated --port=8080
 
       - name: Build and Push Frontend Image (QA)
         run: |
-          IMAGE="${{ env.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY }}/books-web:${{ github.sha }}"
+          IMAGE="${{ env.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY }}/${{ github.event.repository.name }}-web-qa:${{ github.sha }}"
           docker build \
             --build-arg VITE_API_URL="${{ steps.deploy-api-qa.outputs.url }}" \
             -t "$IMAGE" ./frontend
           docker push "$IMAGE"
 
-      - name: Deploy Frontend (books-web) to Cloud Run QA
+      - name: Deploy Frontend to Cloud Run QA
         id: deploy-web-qa
         uses: google-github-actions/deploy-cloudrun@v2
         with:
-          service: books-web
+          service: ${{ github.event.repository.name }}-web-qa
           region: ${{ env.REGION }}
-          image: ${{ env.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY }}/books-web:${{ github.sha }}
+          image: ${{ env.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY }}/${{ github.event.repository.name }}-web-qa:${{ github.sha }}
           flags: --allow-unauthenticated --port=8080
 
   # =========================================================================
@@ -157,11 +157,11 @@ jobs:
       - name: Configure Docker for Artifact Registry
         run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --quiet
 
-      - name: Deploy Backend (books-api-prod) to Cloud Run Production
+      - name: Deploy Backend to Cloud Run Production
         id: deploy-api-prod
         uses: google-github-actions/deploy-cloudrun@v2
         with:
-          service: books-api-prod
+          service: ${{ github.event.repository.name }}-api-prod
           region: ${{ env.REGION }}
           image: ${{ needs.deploy-qa.outputs.backend_image }}
           secrets: ConnectionStrings__DefaultConnection=db-connection-string-prod:latest
@@ -169,17 +169,17 @@ jobs:
 
       - name: Build and Push Frontend Image (Production)
         run: |
-          IMAGE="${{ env.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY }}/books-web-prod:${{ github.sha }}"
+          IMAGE="${{ env.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY }}/${{ github.event.repository.name }}-web-prod:${{ github.sha }}"
           docker build \
             --build-arg VITE_API_URL="${{ steps.deploy-api-prod.outputs.url }}" \
             -t "$IMAGE" ./frontend
           docker push "$IMAGE"
 
-      - name: Deploy Frontend (books-web-prod) to Cloud Run Production
+      - name: Deploy Frontend to Cloud Run Production
         id: deploy-web-prod
         uses: google-github-actions/deploy-cloudrun@v2
         with:
-          service: books-web-prod
+          service: ${{ github.event.repository.name }}-web-prod
           region: ${{ env.REGION }}
-          image: ${{ env.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY }}/books-web-prod:${{ github.sha }}
+          image: ${{ env.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY }}/${{ github.event.repository.name }}-web-prod:${{ github.sha }}
           flags: --allow-unauthenticated --port=8080
