@@ -30,7 +30,10 @@ Repositorio plantilla corporativo gobernado por TI para la creación de aplicaci
 4. **Uso obligatorio de `gh` CLI:** Todo cambio se sube al remoto y se gestiona mediante `gh`.
 5. **Pull Request (`PR`) siempre:** Cada entrega genera un PR hacia `main` (`gh pr create`).
 6. **Cero archivos basura:** No se suben archivos ajenos al core; ante cualquier duda, el agente pregunta al usuario.
-7. **Cero exposición de datos sensibles:** Ninguna credencial o secreto en el repositorio (uso exclusivo de **GCP Secret Manager** en nube y `dotnet user-secrets` en local).
+7. **Cero exposición de datos sensibles (3 Entornos Preconfigurados):** Ninguna credencial o secreto en el repositorio:
+   * **Local:** Variable de entorno de sistema preconfigurada hacia `localhost\SQLEXPRESS` (`VicoderLocalDb` con autenticación integrada de Windows).
+   * **QA (Cloud Run):** Secreto `db-connection-string-qa` en **GCP Secret Manager** apuntando a `BooksDb_QA`.
+   * **Producción (Cloud Run):** Secreto `db-connection-string-prod` en **GCP Secret Manager** apuntando a `BooksDb_Prod` (requiere aprobación de 1 clic del revisor `888Leonidas888`).
 8. **Código DRY (Don't Repeat Yourself):** Reutilización obligatoria de lógica y componentes.
 9. **Cero fallbacks silenciosos:** Prohibido ocultar errores o asumir comportamientos; ante cualquier duda técnica se consulta al usuario.
 10. **Sincronización de `README.md` y `MEMORY.md`:** Ambos documentos se mantienen actualizados en cada entrega.
