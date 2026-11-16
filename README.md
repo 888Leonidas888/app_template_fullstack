@@ -30,10 +30,11 @@ Repositorio plantilla corporativo gobernado por TI para la creación de aplicaci
 4. **Uso obligatorio de `gh` CLI:** Todo cambio se sube al remoto y se gestiona mediante `gh`.
 5. **Pull Request (`PR`) siempre:** Cada entrega genera un PR hacia `main` (`gh pr create`).
 6. **Cero archivos basura:** No se suben archivos ajenos al core; ante cualquier duda, el agente pregunta al usuario.
-7. **Cero exposición de datos sensibles (3 Entornos Preconfigurados):** Ninguna credencial o secreto en el repositorio:
-   * **Local:** Variable de entorno de sistema preconfigurada hacia `localhost\SQLEXPRESS` (`VicoderLocalDb` con autenticación integrada de Windows).
-   * **QA (Cloud Run):** Secreto `db-connection-string-qa` en **GCP Secret Manager** apuntando a `BooksDb_QA`.
-   * **Producción (Cloud Run):** Secreto `db-connection-string-prod` en **GCP Secret Manager** apuntando a `BooksDb_Prod` (requiere aprobación de 1 clic del revisor `888Leonidas888`).
+7. **Cero exposición de datos sensibles (3 Entornos Preconfigurados bajo `ConnectionStrings__DefaultConnection`):** Ninguna credencial o secreto en el repositorio:
+   * **Local:** Variable de entorno de sistema `ConnectionStrings__DefaultConnection` preconfigurada hacia SQL Server Local con autenticación integrada de Windows.
+   * **QA (Cloud Run):** Secreto `db-connection-string-qa` en **GCP Secret Manager** inyectado en `ConnectionStrings__DefaultConnection` apuntando a `BooksDb_QA`.
+   * **Producción (Cloud Run):** Secreto `db-connection-string-prod` en **GCP Secret Manager** inyectado en `ConnectionStrings__DefaultConnection` apuntando a `BooksDb_Prod` (requiere aprobación de 1 clic del Administrador de TI `888Leonidas888`).
+   * **Enlaces Oficiales de QA y Producción:** Se publican automáticamente en el **Resumen de GitHub Actions (`$GITHUB_STEP_SUMMARY`)**, en la sección **Deployments** del repositorio y son entregados en el chat por el agente tras cada despliegue.
 8. **Código DRY (Don't Repeat Yourself):** Reutilización obligatoria de lógica y componentes.
 9. **Cero fallbacks silenciosos:** Prohibido ocultar errores o asumir comportamientos; ante cualquier duda técnica se consulta al usuario.
 10. **Sincronización de `README.md` y `MEMORY.md`:** Ambos documentos se mantienen actualizados en cada entrega.
