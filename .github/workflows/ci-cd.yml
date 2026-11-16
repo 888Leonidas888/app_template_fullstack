@@ -81,8 +81,6 @@ jobs:
     environment:
       name: qa
       url: ${{ steps.deploy-web-qa.outputs.url }}
-    outputs:
-      backend_image: ${{ env.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY }}/${{ github.event.repository.name }}-api:${{ github.sha }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -163,7 +161,7 @@ jobs:
         with:
           service: ${{ github.event.repository.name }}-api-prod
           region: ${{ env.REGION }}
-          image: ${{ needs.deploy-qa.outputs.backend_image }}
+          image: ${{ env.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY }}/${{ github.event.repository.name }}-api:${{ github.sha }}
           secrets: ConnectionStrings__DefaultConnection=db-connection-string-prod:latest
           flags: --allow-unauthenticated --port=8080
 
