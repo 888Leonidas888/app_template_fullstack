@@ -52,3 +52,8 @@ Este repositorio se rige por las reglas obligatorias del **Golden Path Corporati
 5. **Convención de Nombres y Aislamiento de Base de Datos Compartida:**
    - **Repositorios:** Formato obligatorio `app-<area>-<nombre>` (`^app-[a-z0-9]+-[a-z0-9-]+$`, máximo 35 caracteres).
    - **Esquemas SQL:** Cada aplicación debe aislar sus tablas en un esquema propio (`<area>_<nombre>`) mediante `modelBuilder.HasDefaultSchema(...)` y `MigrationsHistoryTable("__EFMigrationsHistory", ...)` con **Migraciones EF Core** (`Database.Migrate()` cuando `IsRelational()`). **Prohibido usar `EnsureCreated()` o crear tablas en `dbo`.**
+6. **Lógica de Negocio 100% en Backend (Preparado para Microservicios):**
+   - Toda regla de negocio, cálculo, validación crítica, estado o auditoría debe vivir exclusivamente en `backend/*.Domain` y `backend/*.Application`. El Frontend (`React`) solo renderiza vistas y envía peticiones a la API.
+7. **Estándar UI/UX Corporativo (Minimalista Pastel + Font Awesome Free):**
+   - **Prohibido usar emoticones/emojis Unicode** en la interfaz (`frontend/src/`). Usa únicamente **Font Awesome Free** (`@fortawesome/fontawesome-free`).
+   - Todas las aplicaciones deben usar el **Design System Minimalista Pastel** definido en `scaffold-clean-fullstack` (fondo neutro claro, tarjetas blancas con bordes sutiles, acentos pastel sobrios y tipografía limpia `Inter`) para mantener identidad corporativa uniforme.
