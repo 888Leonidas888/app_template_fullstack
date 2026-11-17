@@ -39,3 +39,5 @@ Repositorio plantilla corporativo gobernado por TI para la creación de aplicaci
 9. **Cero fallbacks silenciosos:** Prohibido ocultar errores o asumir comportamientos; ante cualquier duda técnica se consulta al usuario.
 10. **Sincronización de `README.md` y `MEMORY.md`:** Ambos documentos se mantienen actualizados en cada entrega.
 11. **`MEMORY.md` como Fuente de Verdad:** Una vez aprobado el plan por el usuario, se registra en `MEMORY.md` antes de ejecutar.
+12. **Convención de Nombres (`app-<area>-<nombre>`):** Todo repositorio nuevo usa el formato `app-<area>-<nombre>` en minúsculas (`kebab-case`, máx. 35 caracteres) para compatibilidad directa con Cloud Run.
+13. **Esquemas SQL Aislados por Aplicación:** Aunque todas las áreas comparten la misma base de datos por entorno, cada aplicación aísla sus tablas en su propio esquema SQL (`<area>_<nombre>`) usando Migraciones EF Core (`Database.Migrate()`), prohibiendo `EnsureCreated()` y tablas en `dbo`.

@@ -49,3 +49,6 @@ Este repositorio se rige por las reglas obligatorias del **Golden Path Corporati
    - `Api`: Minimal APIs, inyección de dependencias y CORS.
 3. **DRY (Don't Repeat Yourself):** Reúsa el código existente. Extrae lógica repetida en funciones, servicios o componentes reutilizables.
 4. **Prohibido Crear Fallbacks Silenciosos:** No ocultes errores con `catch {}` vacíos, valores mágicos inventados ni caminos alternativos silenciosos cuando falle una configuración o dependencia. **Si existe cualquier duda técnica o de negocio, detente y pregunta al usuario; nunca asumas.**
+5. **Convención de Nombres y Aislamiento de Base de Datos Compartida:**
+   - **Repositorios:** Formato obligatorio `app-<area>-<nombre>` (`^app-[a-z0-9]+-[a-z0-9-]+$`, máximo 35 caracteres).
+   - **Esquemas SQL:** Cada aplicación debe aislar sus tablas en un esquema propio (`<area>_<nombre>`) mediante `modelBuilder.HasDefaultSchema(...)` y `MigrationsHistoryTable("__EFMigrationsHistory", ...)` con **Migraciones EF Core** (`Database.Migrate()` cuando `IsRelational()`). **Prohibido usar `EnsureCreated()` o crear tablas en `dbo`.**
