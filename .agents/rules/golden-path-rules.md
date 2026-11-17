@@ -22,3 +22,8 @@ description: Reglas obligatorias de Golden Path para flujo Git, Conventional Com
 7. **Stack y Clean Architecture:**
    - Backend en `.NET 10` Minimal APIs dividido en `Domain`, `Application`, `Infrastructure`, `Api` y `Tests` (`xUnit`).
    - Frontend en React + TypeScript con **Node.js 26 LTS** y `Vitest`.
+8. **Convención de Nombres de Repositorio (`app-<area>-<nombre>`):**
+   - Todo proyecto nuevo debe nombrarse siguiendo el formato `app-<area>-<nombre>` en minúsculas (`kebab-case`, máximo 35 caracteres, regex `^app-[a-z0-9]+-[a-z0-9-]+$`, sin guiones bajos ni mayúsculas) para compatibilidad directa con **Google Cloud Run**.
+9. **Aislamiento en Base de Datos Compartida (Esquemas SQL + Migraciones):**
+   - Todas las aplicaciones comparten la misma base de datos por entorno (`VicoderLocalDb`, `BooksDb_QA`, `BooksDb_Prod`), pero cada aplicación **debe aislar sus tablas en su propio esquema SQL** (`<area>_<nombre>`).
+   - Configura `modelBuilder.HasDefaultSchema("<esquema>")` y `MigrationsHistoryTable("__EFMigrationsHistory", "<esquema>")` en `AppDbContext`, aplicando migraciones con `Database.Migrate()` (solo si `Database.IsRelational()`). **Prohibido usar `EnsureCreated()` o escribir tablas en `dbo`.**

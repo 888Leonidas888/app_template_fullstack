@@ -31,11 +31,13 @@ Crea la solución `backend/Books.sln` (o el nombre del dominio indicado en `MEMO
 3. **`Infrastructure` (`*.Infrastructure.csproj`):**
    - Referencia a `Domain` y `Application`.
    - Paquetes: `Microsoft.EntityFrameworkCore.SqlServer` (`10.0.*`) y `Microsoft.EntityFrameworkCore.InMemory` (`10.0.*`).
-   - Contiene `Data/AppDbContext.cs`, `Repositories/` y `DependencyInjection.cs`.
+   - Contiene `Data/AppDbContext.cs`, `Repositories/`, `Migrations/` y `DependencyInjection.cs`.
+   - **Aislamiento por Esquema SQL:** En `AppDbContext.OnModelCreating`, configura `modelBuilder.HasDefaultSchema("<area>_<nombre>");` (derivado del repositorio `app-<area>-<nombre>`) y en `DependencyInjection.cs` configura el historial de migraciones por esquema: `sql.MigrationsHistoryTable("__EFMigrationsHistory", "<area>_<nombre>")`.
+   - Genera la migración inicial (`dotnet ef migrations add InitialCreate ...`). **Prohibido usar `EnsureCreated()` o escribir tablas en `dbo`.**
 4. **`Api` (`*.Api.csproj`):**
    - Referencia a `Application` e `Infrastructure`.
    - `appsettings.json` con `"DefaultConnection": ""` (vacío por seguridad; nunca hardcodear secretos).
-   - `Program.cs` con Minimal APIs, `/health`, CORS y `EnsureCreated()` / migración inicial.
+   - `Program.cs` con Minimal APIs, `/health`, CORS y ejecución segura de migraciones al arranque (`if (db.Database.IsRelational()) db.Database.Migrate();`).
 5. **`Tests` (`*.Tests.csproj`):**
    - Paquetes: `xunit`, `xunit.runner.visualstudio`, `Microsoft.NET.Test.Sdk`, `Microsoft.AspNetCore.Mvc.Testing` (`10.0.*`).
    - Incluye obligatoriamente `ArchitectureTests.cs` validando por reflexión que `Domain` no dependa de nada y `Application` solo dependa de `Domain`.
