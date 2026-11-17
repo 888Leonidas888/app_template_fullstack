@@ -38,4 +38,5 @@
 - [x] **Tarea 5:** Corregir referencia directa a la imagen Docker del backend en el job `deploy-prod` de `.github/workflows/ci-cd.yml` para evitar que GitHub Actions filtre el output por contener `secrets.GCP_PROJECT_ID`.
 - [x] **Tarea 6:** Automatizar la publicación de enlaces oficiales de QA y Producción en el resumen de GitHub Actions (`$GITHUB_STEP_SUMMARY`) y en la skill `git-pr-workflow`.
 - [x] **Tarea 7:** Establecer convención oficial de nombres de repositorios (`app-<area>-<nombre>`, máx. 35 caracteres) y aislamiento por esquemas SQL + Migraciones EF Core (`HasDefaultSchema` / `MigrationsHistoryTable`) para compartir la misma base de datos entre áreas.
+- [x] **Tarea 8:** Exigir lógica de negocio 100% en Backend (preparado para futura unificación por microservicios) y estandarizar el Frontend con Design System Minimalista Pastel, Font Awesome Free y cero emoticones Unicode.
 

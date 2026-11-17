@@ -27,3 +27,7 @@ description: Reglas obligatorias de Golden Path para flujo Git, Conventional Com
 9. **Aislamiento en Base de Datos Compartida (Esquemas SQL + Migraciones):**
    - Todas las aplicaciones comparten la misma base de datos por entorno (`VicoderLocalDb`, `BooksDb_QA`, `BooksDb_Prod`), pero cada aplicación **debe aislar sus tablas en su propio esquema SQL** (`<area>_<nombre>`).
    - Configura `modelBuilder.HasDefaultSchema("<esquema>")` y `MigrationsHistoryTable("__EFMigrationsHistory", "<esquema>")` en `AppDbContext`, aplicando migraciones con `Database.Migrate()` (solo si `Database.IsRelational()`). **Prohibido usar `EnsureCreated()` o escribir tablas en `dbo`.**
+10. **Lógica de Negocio Exclusiva del Backend:**
+    - Cálculos, reglas de negocio y validaciones críticas residen únicamente en `Domain` y `Application` (listo para futura unificación por microservicios). El Frontend es solo presentación.
+11. **UI Minimalista Pastel, Font Awesome Free y Cero Emojis:**
+    - Prohibido usar emoticones/emojis Unicode en botones, títulos, tablas o alertas. Usa únicamente **Font Awesome Free** (`@fortawesome/fontawesome-free`) y la paleta **Minimalista Pastel** definida en `scaffold-clean-fullstack`.

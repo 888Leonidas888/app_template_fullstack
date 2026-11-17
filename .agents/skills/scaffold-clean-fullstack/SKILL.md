@@ -44,9 +44,13 @@ Crea la solución `backend/Books.sln` (o el nombre del dominio indicado en `MEMO
    - Incluye pruebas de integración con `WebApplicationFactory<Program>`.
 
 ### Paso 2: Crear el Frontend en React + TypeScript (`frontend/`)
-1. Configura `package.json`, `tsconfig.json` (con `"types": ["vite/client", "vitest/globals", "@testing-library/jest-dom"]`) y `vite.config.ts`.
+1. Configura `package.json` (incluyendo `@fortawesome/fontawesome-free`), `tsconfig.json` (con `"types": ["vite/client", "vitest/globals", "@testing-library/jest-dom"]`) y `vite.config.ts`.
 2. Lee la URL del backend desde `import.meta.env.VITE_API_URL` (sin crear fallbacks silenciosos que oculten errores de red: muestra el estado de error claramente en la UI si la petición falla).
-3. Agrega pruebas unitarias en `src/App.test.tsx` con `Vitest` y `@testing-library/react`.
+3. **Cero Lógica de Negocio en Frontend:** React únicamente renderiza datos y envía formularios hacia la API; toda validación de negocio o cálculo vive en el Backend (`Application` / `Domain`).
+4. **Identidad Visual Corporativa (Minimalista Pastel + Font Awesome Free):**
+   - **Cero emoticones/emojis Unicode** en toda la interfaz; usa únicamente iconos de **Font Awesome Free** (`import '@fortawesome/fontawesome-free/css/all.min.css'` y `<i className="fa-solid fa-..." />`).
+   - Aplica obligatoriamente los tokens CSS minimalistas pastel: fondo general `#F8FAFB`, tarjetas `#FFFFFF` con borde `#E5E7EB` (sin sombras pesadas ni gradientes), texto `#1F2937` / `#6B7280`, acento primario azul pizarra `#647D9B`, éxito verde salvia `#6B9080`, alerta ámbar pastel `#D4A373`, peligro rosa pastel `#C97A7E` y tipografía `Inter` / `system-ui`.
+5. Agrega pruebas unitarias en `src/App.test.tsx` con `Vitest` y `@testing-library/react`.
 
 ### Paso 3: Contenedores Docker (`Dockerfile` y `docker-compose.yml`)
 1. `backend/Dockerfile`: Multi-stage con `mcr.microsoft.com/dotnet/sdk:10.0` y `mcr.microsoft.com/dotnet/aspnet:10.0` en puerto `8080`.

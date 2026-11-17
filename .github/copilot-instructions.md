@@ -18,3 +18,7 @@ Al revisar cualquier Pull Request en este repositorio, actúa como un Arquitecto
 - Todo nuevo endpoint en el Backend o vista en el Frontend debe incluir sus pruebas en `xUnit` o `Vitest`.
 - Verifica que los commits y el título del PR sigan **Conventional Commits v1.0.0** (`feat:`, `fix:`, `docs:`, `refactor:`, `chore:`).
 - Verifica que `MEMORY.md` y `README.md` hayan sido actualizados reflejando los cambios del Pull Request.
+
+## 5. Lógica en Backend y Estándar Visual Corporativo (UI/UX)
+- Rechaza lógica de negocio, cálculos o validaciones críticas implementadas únicamente en `frontend/src/` (deben vivir en `backend/*.Application` o `backend/*.Domain`).
+- Rechaza emoticones/emojis Unicode en la interfaz de usuario; exige el uso de **Font Awesome Free** (`fa-solid` / `fa-regular`) y la paleta corporativa **Minimalista Pastel** (sin gradientes estridentes ni estilos genéricos).
