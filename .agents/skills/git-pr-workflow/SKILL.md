@@ -54,3 +54,15 @@ Usa este skill siempre que vayas a iniciar una tarea en Git o entregar cambios h
 3. **REGLA DE ORO (NO AUTO-MERGE):**
    - **DETENTE después de crear el PR y entregar el enlace al usuario.**
    - **NUNCA ejecutes `gh pr merge` ni fusiones a `main`** a menos que el usuario te dé la orden explícita de hacerlo.
+
+---
+
+## 5. Post-Merge: Entrega Automática de Enlaces Oficiales de QA y Producción
+Cuando el usuario ordene explícitamente fusionar el PR a `main` (`gh pr merge <id> --merge --delete-branch`) o solicite conocer los enlaces de despliegue:
+1. Monitorea la ejecución del workflow en `main` con `gh run list --limit 1` / `gh run watch`.
+2. Apenas concluya el job `deploy-qa` (y `deploy-prod` tras la aprobación del Revisor de TI `888Leonidas888`), consulta y entrega al usuario en el chat la tabla con los **Enlaces Oficiales en Google Cloud Run**:
+   ```powershell
+   gcloud run services list --region=us-central1 --filter="metadata.name~<nombre-repo>" --format="table(metadata.name,status.url)"
+   ```
+   *(También quedan publicados automáticamente en la pestaña **Deployments** del repositorio en GitHub y en el **Job Summary** de la corrida de GitHub Actions).*
+
