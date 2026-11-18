@@ -39,19 +39,20 @@ Este repositorio se rige por las reglas obligatorias del **Golden Path Corporati
 
 ## 4. Calidad de Código y Arquitectura Limpia
 1. **Stack Tecnológico Fijo:**
-   - **Backend:** C# sobre `.NET 10` (`net10.0`) con Minimal APIs y Entity Framework Core (SQL Server).
+   - **Backend:** C# sobre `.NET 10` (`net10.0`) con Minimal APIs y Entity Framework Core (**MySQL**).
    - **Frontend:** React con TypeScript (Vite) sobre **Node.js 26 LTS** (`v26.x`).
    - **Tests:** `xUnit` en Backend y `Vitest` + `@testing-library/react` en Frontend.
 2. **Clean Architecture Estricta (`backend/`):**
    - `Domain`: Entidades e interfaces de repositorio. Cero dependencias a otros proyectos o paquetes de persistencia.
    - `Application`: Casos de uso, DTOs y servicios de negocio. Solo depende de `Domain`.
-   - `Infrastructure`: EF Core (`DbContext`), SQL Server e implementación de repositorios. Depende de `Domain` y `Application`.
+   - `Infrastructure`: EF Core (`DbContext`), MySQL e implementación de repositorios. Depende de `Domain` y `Application`.
    - `Api`: Minimal APIs, inyección de dependencias y CORS.
 3. **DRY (Don't Repeat Yourself):** Reúsa el código existente. Extrae lógica repetida en funciones, servicios o componentes reutilizables.
 4. **Prohibido Crear Fallbacks Silenciosos:** No ocultes errores con `catch {}` vacíos, valores mágicos inventados ni caminos alternativos silenciosos cuando falle una configuración o dependencia. **Si existe cualquier duda técnica o de negocio, detente y pregunta al usuario; nunca asumas.**
-5. **Convención de Nombres y Aislamiento de Base de Datos Compartida:**
-   - **Repositorios:** Formato obligatorio `app-<area>-<nombre>` (`^app-[a-z0-9]+-[a-z0-9-]+$`, máximo 35 caracteres).
-   - **Esquemas SQL:** Cada aplicación debe aislar sus tablas en un esquema propio (`<area>_<nombre>`) mediante `modelBuilder.HasDefaultSchema(...)` y `MigrationsHistoryTable("__EFMigrationsHistory", ...)` con **Migraciones EF Core** (`Database.Migrate()` cuando `IsRelational()`). **Prohibido usar `EnsureCreated()` o crear tablas en `dbo`.**
+5. **Convención de Nombres, Lista Cerrada de Áreas y Aislamiento MySQL:**
+   - **Áreas Permitidas (Lista Cerrada):** Únicamente `contabilidad`, `rrhh`, `sistemas`, `comercial`, `almacen`. Si el usuario solicita un área fuera de esta lista, **detente e indícale que se comunique con TI para solicitar su alta**.
+   - **Repositorios:** Formato obligatorio `app-<area>-<nombre>` (`^app-(contabilidad|rrhh|sistemas|comercial|almacen)-[a-z0-9-]+$`, máximo 35 caracteres).
+   - **Base de Datos MySQL por Área y Prefijo por App:** Cada área comparte una única BD por entorno (`local_<area>`, `qa_<area>`, `prod_<area>`), creada automáticamente al arrancar (`CREATE DATABASE IF NOT EXISTS`) si es relacional. Dentro de esa BD, cada app aísla sus tablas con prefijo `<nombre>_<tabla>` y su historial propio `MigrationsHistoryTable("__EFMigrationsHistory_<nombre>")` usando **Migraciones EF Core** (`Database.Migrate()`). **Prohibido usar `EnsureCreated()`.**
 6. **Lógica de Negocio 100% en Backend (Preparado para Microservicios):**
    - Toda regla de negocio, cálculo, validación crítica, estado o auditoría debe vivir exclusivamente en `backend/*.Domain` y `backend/*.Application`. El Frontend (`React`) solo renderiza vistas y envía peticiones a la API.
 7. **Estándar UI/UX Corporativo (Minimalista Pastel + Font Awesome Free):**

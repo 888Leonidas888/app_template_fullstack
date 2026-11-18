@@ -109,6 +109,7 @@ jobs:
           service: ${{ github.event.repository.name }}-api-qa
           region: ${{ env.REGION }}
           image: ${{ env.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY }}/${{ github.event.repository.name }}-api:${{ github.sha }}
+          env_vars: ASPNETCORE_ENVIRONMENT=QA
           secrets: ConnectionStrings__DefaultConnection=db-connection-string-qa:latest
           flags: --allow-unauthenticated --port=8080
 
@@ -171,6 +172,7 @@ jobs:
           service: ${{ github.event.repository.name }}-api-prod
           region: ${{ env.REGION }}
           image: ${{ env.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY }}/${{ github.event.repository.name }}-api:${{ github.sha }}
+          env_vars: ASPNETCORE_ENVIRONMENT=Production
           secrets: ConnectionStrings__DefaultConnection=db-connection-string-prod:latest
           flags: --allow-unauthenticated --port=8080
 
