@@ -1,17 +1,21 @@
-# De la idea a producción con IA
+# Cada área puede crear sus propias apps con IA
+
+Quien conoce la necesidad crea la solución con IA y la prueba con su equipo. Así el negocio puede avanzar desde el primer día dentro del flujo de TI.
 
 ```mermaid
 flowchart LR
     A["1. Instala las herramientas<br/>en tu equipo"] --> B["2. Revisa el código<br/>con Copilot Review"]
-    B --> C["3. Despliega a QA<br/>en Google Cloud"]
-    C --> D["4. Aprueba y pasa a producción<br/>en Google Cloud"]
+    B --> C["3. Despliegue automático a QA<br/>en Google Cloud"]
+    C --> D["4. TI aprueba y la app pasa<br/>a producción en Google Cloud"]
 ```
 
-1. **Prepara tu equipo.** Instalas las herramientas una sola vez y ya puedes trabajar con IA.
-2. **Revisa con Copilot Review.** La IA señala posibles problemas antes de integrar los cambios.
-3. **Prueba en QA.** Al integrar los cambios, se publica una versión de prueba en Google Cloud para que el equipo la valide.
-4. **Da el visto bueno.** Después de la validación, TI aprueba la salida a producción en Google Cloud.
+1. **Instala las herramientas.** Preparas tu equipo una sola vez y usas la IA para crear la app que tu área necesita.
+2. **Revisa con Copilot Review.** Un agente revisa la calidad del código y señala posibles desvíos de los lineamientos de TI.
+3. **Prueba en QA.** Al integrar los cambios, la app se despliega automáticamente a un entorno de pruebas en Google Cloud para que tu equipo la valide.
+4. **Pase a producción.** Después de la validación, TI da el visto bueno y el despliegue a producción en Google Cloud se ejecuta automáticamente.
 
 ## ¿Qué gana el negocio?
 
-Menos tiempo entre una idea y su primera prueba. Copilot ayuda a detectar problemas temprano, el equipo puede probar y pedir ajustes, y TI decide cuándo se publica.
+- **Más rapidez y menos esperas.** Cada área puede crear y ajustar su app directamente. Los despliegues automáticos reducen los pasos manuales.
+- **Un estándar de TI.** Las apps siguen el mismo flujo de trabajo y usan la arquitectura, el diseño y las tecnologías definidos por TI.
+- **Recursos de la empresa.** La revisión, las pruebas y la publicación se hacen dentro del entorno corporativo, con herramientas e infraestructura propias.

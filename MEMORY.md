@@ -43,4 +43,5 @@
 ### Presentación para gerencia
 
 - [x] Preparar las versiones Mermaid y HTML del flujo guiado con IA en la rama `docs/presentacion-gerencia`. Se verificó el diagrama y la vista HTML en escritorio y móvil.
+- [x] Reforzar la propuesta para gerencia en ambas versiones. Las áreas crean sus propias apps con IA siguiendo el estándar de TI, con revisión de código por un agente y despliegues automáticos en el entorno corporativo. Se verificaron ambas versiones y el diseño adaptable.
 

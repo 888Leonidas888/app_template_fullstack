@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>De la idea a producción con IA</title>
+  <title>Cada área puede crear sus propias apps con IA</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
   <style>
     * { box-sizing: border-box; }
@@ -18,14 +18,21 @@
 
     main {
       width: min(72rem, calc(100% - 2rem));
-      margin: clamp(2rem, 8vw, 7rem) auto;
+      margin: clamp(2rem, 4vw, 4rem) auto;
     }
 
     h1 {
-      margin: 0 0 2rem;
+      max-width: 20ch;
+      margin: 0 0 0.75rem;
       font-size: clamp(2rem, 5vw, 3.5rem);
       line-height: 1.12;
       letter-spacing: -0.045em;
+    }
+
+    .intro {
+      max-width: 64ch;
+      margin-bottom: 2rem;
+      font-size: 1.125rem;
     }
 
     .flow {
@@ -90,8 +97,22 @@
 
     .benefits h2 { margin-top: 0; }
 
+    .benefits-list {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem 1.5rem;
+      margin: 0.75rem 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .benefits-list strong {
+      display: block;
+      margin-bottom: 0.2rem;
+    }
+
     @media (max-width: 52rem) {
-      .flow { grid-template-columns: 1fr; }
+      .flow, .benefits-list { grid-template-columns: 1fr; }
 
       .step-arrow {
         top: calc(100% + 0.75rem);
@@ -103,36 +124,50 @@
 </head>
 <body>
   <main>
-    <h1>De la idea a producción con IA</h1>
+    <h1>Cada área puede crear sus propias apps con IA</h1>
+    <p class="intro">Quien conoce la necesidad crea la solución con IA y la prueba con su equipo. Así el negocio puede avanzar desde el primer día dentro del flujo de TI.</p>
     <ol class="flow" role="list">
       <li class="step">
         <span class="step-icon" aria-hidden="true"><i class="fa-solid fa-laptop"></i></span>
         <h2>1. Instala las herramientas</h2>
-        <p>Prepara tu equipo una sola vez para empezar a trabajar con IA.</p>
+        <p>Preparas tu equipo una sola vez y usas la IA para crear la app que tu área necesita.</p>
         <i class="step-arrow fa-solid fa-arrow-right" aria-hidden="true"></i>
       </li>
       <li class="step">
         <span class="step-icon" aria-hidden="true"><i class="fa-solid fa-code"></i></span>
         <h2>2. Revisa con Copilot Review</h2>
-        <p>La IA señala posibles problemas en el código antes de integrar los cambios.</p>
+        <p>Un agente revisa la calidad del código y señala posibles desvíos de los lineamientos de TI.</p>
         <i class="step-arrow fa-solid fa-arrow-right" aria-hidden="true"></i>
       </li>
       <li class="step">
         <span class="step-icon" aria-hidden="true"><i class="fa-solid fa-cloud-arrow-up"></i></span>
-        <h2>3. Despliega a QA</h2>
-        <p>Al integrar los cambios, se publica una versión de prueba en Google Cloud para que el equipo la valide.</p>
+        <h2>3. Prueba en QA</h2>
+        <p>Al integrar los cambios, la app se despliega automáticamente a un entorno de pruebas en Google Cloud para que tu equipo la valide.</p>
         <i class="step-arrow fa-solid fa-arrow-right" aria-hidden="true"></i>
       </li>
       <li class="step">
         <span class="step-icon" aria-hidden="true"><i class="fa-solid fa-circle-check"></i></span>
-        <h2>4. Aprueba y pasa a producción</h2>
-        <p>Después de la validación, TI aprueba la salida a producción en Google Cloud.</p>
+        <h2>4. Pase a producción</h2>
+        <p>Después de la validación, TI da el visto bueno y el despliegue a producción en Google Cloud se ejecuta automáticamente.</p>
       </li>
     </ol>
 
     <section class="benefits" aria-labelledby="benefits-heading">
       <h2 id="benefits-heading">¿Qué gana el negocio?</h2>
-      <p>Menos tiempo entre una idea y su primera prueba. Copilot ayuda a detectar problemas temprano, el equipo puede probar y pedir ajustes, y TI decide cuándo se publica.</p>
+      <ul class="benefits-list" role="list">
+        <li>
+          <strong>Más rapidez y menos esperas</strong>
+          <p>Cada área puede crear y ajustar su app directamente. Los despliegues automáticos reducen los pasos manuales.</p>
+        </li>
+        <li>
+          <strong>Un estándar de TI</strong>
+          <p>Las apps siguen el mismo flujo de trabajo y usan la arquitectura, el diseño y las tecnologías definidos por TI.</p>
+        </li>
+        <li>
+          <strong>Recursos de la empresa</strong>
+          <p>La revisión, las pruebas y la publicación se hacen dentro del entorno corporativo, con herramientas e infraestructura propias.</p>
+        </li>
+      </ul>
     </section>
   </main>
 </body>
