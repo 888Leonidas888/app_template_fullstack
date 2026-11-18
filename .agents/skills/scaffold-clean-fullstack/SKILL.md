@@ -30,14 +30,17 @@ Crea la solución `backend/Books.sln` (o el nombre del dominio indicado en `MEMO
    - Contiene `DTOs/` y `Services/` (casos de uso y reglas de negocio).
 3. **`Infrastructure` (`*.Infrastructure.csproj`):**
    - Referencia a `Domain` y `Application`.
-   - Paquetes: `Microsoft.EntityFrameworkCore.SqlServer` (`10.0.*`) y `Microsoft.EntityFrameworkCore.InMemory` (`10.0.*`).
+   - Paquetes: `Pomelo.EntityFrameworkCore.MySql` (o proveedor MySQL compatible con `.NET 10`) y `Microsoft.EntityFrameworkCore.InMemory` (`10.0.*`).
    - Contiene `Data/AppDbContext.cs`, `Repositories/`, `Migrations/` y `DependencyInjection.cs`.
-   - **Aislamiento por Esquema SQL:** En `AppDbContext.OnModelCreating`, configura `modelBuilder.HasDefaultSchema("<area>_<nombre>");` (derivado del repositorio `app-<area>-<nombre>`) y en `DependencyInjection.cs` configura el historial de migraciones por esquema: `sql.MigrationsHistoryTable("__EFMigrationsHistory", "<area>_<nombre>")`.
-   - Genera la migración inicial (`dotnet ef migrations add InitialCreate ...`). **Prohibido usar `EnsureCreated()` o escribir tablas en `dbo`.**
+   - **Base de Datos MySQL por Área + Prefijo por App:**
+     - Toma la cadena base de `ConnectionStrings:DefaultConnection` y asigna dinámicamente `Database=<entorno>_<area>` según `ASPNETCORE_ENVIRONMENT` (`local_<area>` en Development, `qa_<area>` en QA, `prod_<area>` en Production).
+     - En `AppDbContext.OnModelCreating`, mapea **todas las tablas** con prefijo `<nombre>_` (ej. `ToTable("cajachica_vales")`) para evitar colisiones dentro de la misma BD de área.
+     - En `DependencyInjection.cs`, configura el historial propio por app: `mysql.MigrationsHistoryTable("__EFMigrationsHistory_<nombre>")`.
+   - Genera la migración inicial (`dotnet ef migrations add InitialCreate ...`). **Prohibido usar `EnsureCreated()`.**
 4. **`Api` (`*.Api.csproj`):**
    - Referencia a `Application` e `Infrastructure`.
    - `appsettings.json` con `"DefaultConnection": ""` (vacío por seguridad; nunca hardcodear secretos).
-   - `Program.cs` con Minimal APIs, `/health`, CORS y ejecución segura de migraciones al arranque (`if (db.Database.IsRelational()) db.Database.Migrate();`).
+   - `Program.cs` con Minimal APIs, `/health`, CORS y arranque seguro en MySQL: cuando `db.Database.IsRelational()`, ejecuta `CREATE DATABASE IF NOT EXISTS \`<entorno>_<area>\`` sobre la conexión base y luego `db.Database.Migrate()`.
 5. **`Tests` (`*.Tests.csproj`):**
    - Paquetes: `xunit`, `xunit.runner.visualstudio`, `Microsoft.NET.Test.Sdk`, `Microsoft.AspNetCore.Mvc.Testing` (`10.0.*`).
    - Incluye obligatoriamente `ArchitectureTests.cs` validando por reflexión que `Domain` no dependa de nada y `Application` solo dependa de `Domain`.
@@ -55,7 +58,7 @@ Crea la solución `backend/Books.sln` (o el nombre del dominio indicado en `MEMO
 ### Paso 3: Contenedores Docker (`Dockerfile` y `docker-compose.yml`)
 1. `backend/Dockerfile`: Multi-stage con `mcr.microsoft.com/dotnet/sdk:10.0` y `mcr.microsoft.com/dotnet/aspnet:10.0` en puerto `8080`.
 2. `frontend/Dockerfile` + `frontend/nginx.conf`: Multi-stage con `node:26-alpine` (recibiendo `ARG VITE_API_URL`) y `nginx:alpine` en puerto `8080`.
-3. `docker-compose.yml`: Servicios `sqlserver`, `books-api` y `books-web`.
+3. `docker-compose.yml`: Servicios `mysql` (`mysql:8.0`), `books-api` y `books-web`.
 
 ### Paso 4: Verificación y Documentación
 1. Ejecuta `dotnet test backend/*.sln` y verifica que todos los tests pasen.

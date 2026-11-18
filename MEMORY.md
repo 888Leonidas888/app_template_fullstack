@@ -9,10 +9,11 @@
 - **Stack Oficial:**
   - **Frontend:** React + TypeScript + Vite + Vitest sobre **Node.js 26 LTS**.
   - **Backend:** C# `.NET 10` (`net10.0`) Minimal APIs + Entity Framework Core + `xUnit` en **Clean Architecture** (`Domain`, `Application`, `Infrastructure`, `Api`, `Tests`).
-  - **Base de Datos (3 Entornos Separados y Preconfigurados):**
-    - **Local:** `VicoderLocalDb` en `localhost\SQLEXPRESS` (configurada una sola vez en variable de entorno de Windows `ConnectionStrings__DefaultConnection` con `Trusted_Connection=True`, cero contraseñas).
-    - **QA (GCP Cloud SQL):** `BooksDb_QA` inyectada vía **GCP Secret Manager** (`db-connection-string-qa:latest`).
-    - **Producción (GCP Cloud SQL):** `BooksDb_Prod` inyectada vía **GCP Secret Manager** (`db-connection-string-prod:latest`).
+  - **Base de Datos (MySQL — 1 BD por Área y Entorno + Prefijo por App):**
+    - **Áreas oficiales permitidas:** `contabilidad`, `rrhh`, `sistemas`, `comercial`, `almacen` (cualquier otra área debe solicitarse a TI).
+    - **Local:** MySQL local (`local_<area>`, configurada una sola vez en `ConnectionStrings__DefaultConnection`).
+    - **QA (GCP Cloud SQL):** `qa_<area>` usando cadena base desde **GCP Secret Manager** (`db-connection-string-qa:latest`) y `ASPNETCORE_ENVIRONMENT=QA`.
+    - **Producción (GCP Cloud SQL):** `prod_<area>` usando cadena base desde **GCP Secret Manager** (`db-connection-string-prod:latest`) y `ASPNETCORE_ENVIRONMENT=Production` (con aprobación de `888Leonidas888`).
   - **Despliegue:** GitHub Actions hacia **Google Cloud Run** (`qa` automático y `production` protegido con aprobación obligatoria de `888Leonidas888`).
 
 ---
@@ -39,4 +40,5 @@
 - [x] **Tarea 6:** Automatizar la publicación de enlaces oficiales de QA y Producción en el resumen de GitHub Actions (`$GITHUB_STEP_SUMMARY`) y en la skill `git-pr-workflow`.
 - [x] **Tarea 7:** Establecer convención oficial de nombres de repositorios (`app-<area>-<nombre>`, máx. 35 caracteres) y aislamiento por esquemas SQL + Migraciones EF Core (`HasDefaultSchema` / `MigrationsHistoryTable`) para compartir la misma base de datos entre áreas.
 - [x] **Tarea 8:** Exigir lógica de negocio 100% en Backend (preparado para futura unificación por microservicios) y estandarizar el Frontend con Design System Minimalista Pastel, Font Awesome Free y cero emoticones Unicode.
+- [x] **Tarea 9:** Migrar gobernanza de base de datos a **MySQL** (1 BD por área `<entorno>_<area>` + prefijo `<nombre>_` en tablas y `__EFMigrationsHistory_<nombre>`), restringir áreas permitidas a `contabilidad`, `rrhh`, `sistemas`, `comercial`, `almacen` y explicitar `ASPNETCORE_ENVIRONMENT` en `ci-cd.yml`.
 
