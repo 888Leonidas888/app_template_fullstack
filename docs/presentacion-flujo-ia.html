@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>De la idea a producción con IA</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: #f7f8fc;
+      color: #202940;
+      font-family: Inter, system-ui, sans-serif;
+      line-height: 1.55;
+    }
+
+    main {
+      width: min(72rem, calc(100% - 2rem));
+      margin: clamp(2rem, 8vw, 7rem) auto;
+    }
+
+    h1 {
+      margin: 0 0 2rem;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      line-height: 1.12;
+      letter-spacing: -0.045em;
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1.5rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .step {
+      position: relative;
+      padding: 1.25rem;
+      border: 1px solid #dce2eb;
+      border-radius: 1rem;
+      background: #fff;
+    }
+
+    .step:nth-child(1) { --pastel: #e5defb; }
+    .step:nth-child(2) { --pastel: #dceaff; }
+    .step:nth-child(3) { --pastel: #dcf2e7; }
+    .step:nth-child(4) { --pastel: #fbe8d7; }
+
+    .step-icon {
+      display: inline-grid;
+      width: 3rem;
+      height: 3rem;
+      place-items: center;
+      border-radius: 0.75rem;
+      background: var(--pastel);
+      font-size: 1.2rem;
+    }
+
+    .step-arrow {
+      position: absolute;
+      top: 50%;
+      left: calc(100% + 0.75rem);
+      transform: translate(-50%, -50%);
+      color: #596480;
+      font-size: 0.875rem;
+    }
+
+    h2 {
+      margin: 0.9rem 0 0.35rem;
+      font-size: 1.15rem;
+      line-height: 1.3;
+    }
+
+    p {
+      margin: 0;
+      color: #44516a;
+    }
+
+    .benefits {
+      margin-top: 1.5rem;
+      padding: 1.25rem;
+      border: 1px solid #deddf0;
+      border-radius: 1rem;
+      background: #eeedf9;
+    }
+
+    .benefits h2 { margin-top: 0; }
+
+    @media (max-width: 52rem) {
+      .flow { grid-template-columns: 1fr; }
+
+      .step-arrow {
+        top: calc(100% + 0.75rem);
+        left: 50%;
+        transform: translate(-50%, -50%) rotate(90deg);
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>De la idea a producción con IA</h1>
+    <ol class="flow" role="list">
+      <li class="step">
+        <span class="step-icon" aria-hidden="true"><i class="fa-solid fa-laptop"></i></span>
+        <h2>1. Instala las herramientas</h2>
+        <p>Prepara tu equipo una sola vez para empezar a trabajar con IA.</p>
+        <i class="step-arrow fa-solid fa-arrow-right" aria-hidden="true"></i>
+      </li>
+      <li class="step">
+        <span class="step-icon" aria-hidden="true"><i class="fa-solid fa-code"></i></span>
+        <h2>2. Revisa con Copilot Review</h2>
+        <p>La IA señala posibles problemas en el código antes de integrar los cambios.</p>
+        <i class="step-arrow fa-solid fa-arrow-right" aria-hidden="true"></i>
+      </li>
+      <li class="step">
+        <span class="step-icon" aria-hidden="true"><i class="fa-solid fa-cloud-arrow-up"></i></span>
+        <h2>3. Despliega a QA</h2>
+        <p>Al integrar los cambios, se publica una versión de prueba en Google Cloud para que el equipo la valide.</p>
+        <i class="step-arrow fa-solid fa-arrow-right" aria-hidden="true"></i>
+      </li>
+      <li class="step">
+        <span class="step-icon" aria-hidden="true"><i class="fa-solid fa-circle-check"></i></span>
+        <h2>4. Aprueba y pasa a producción</h2>
+        <p>Después de la validación, TI aprueba la salida a producción en Google Cloud.</p>
+      </li>
+    </ol>
+
+    <section class="benefits" aria-labelledby="benefits-heading">
+      <h2 id="benefits-heading">¿Qué gana el negocio?</h2>
+      <p>Menos tiempo entre una idea y su primera prueba. Copilot ayuda a detectar problemas temprano, el equipo puede probar y pedir ajustes, y TI decide cuándo se publica.</p>
+    </section>
+  </main>
+</body>
+</html>

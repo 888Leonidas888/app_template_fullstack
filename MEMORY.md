@@ -40,3 +40,7 @@
 - [x] **Tarea 7:** Establecer convención oficial de nombres de repositorios (`app-<area>-<nombre>`, máx. 35 caracteres) y aislamiento por esquemas SQL + Migraciones EF Core (`HasDefaultSchema` / `MigrationsHistoryTable`) para compartir la misma base de datos entre áreas.
 - [x] **Tarea 8:** Exigir lógica de negocio 100% en Backend (preparado para futura unificación por microservicios) y estandarizar el Frontend con Design System Minimalista Pastel, Font Awesome Free y cero emoticones Unicode.
 
+### Presentación para gerencia
+
+- [x] Preparar las versiones Mermaid y HTML del flujo guiado con IA en la rama `docs/presentacion-gerencia`. Se verificó el diagrama y la vista HTML en escritorio y móvil.
+
