@@ -32,3 +32,6 @@ description: Reglas obligatorias de Golden Path para flujo Git, Conventional Com
     - Cálculos, reglas de negocio y validaciones críticas residen únicamente en `Domain` y `Application` (listo para futura unificación por microservicios). El Frontend es solo presentación.
 11. **UI Minimalista Pastel, Font Awesome Free y Cero Emojis:**
     - Prohibido usar emoticones/emojis Unicode en botones, títulos, tablas o alertas. Usa únicamente **Font Awesome Free** (`@fortawesome/fontawesome-free`) y la paleta **Minimalista Pastel** definida en `scaffold-clean-fullstack`.
+12. **Inglés Técnico en Código y CORS Restringido:**
+    - Nombres de clases, interfaces, métodos, DTOs, variables y archivos de código deben escribirse en **inglés técnico** (los textos visibles de UI e informes pueden estar en español).
+    - Prohibido `AllowAnyOrigin()` en `Program.cs`; configura orígenes permitidos explícitos (`Cors:AllowedOrigins` o dominio exacto del frontend).

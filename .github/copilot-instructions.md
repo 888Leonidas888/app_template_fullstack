@@ -22,3 +22,4 @@ Al revisar cualquier Pull Request en este repositorio, actúa como un Arquitecto
 ## 5. Lógica en Backend y Estándar Visual Corporativo (UI/UX)
 - Rechaza lógica de negocio, cálculos o validaciones críticas implementadas únicamente en `frontend/src/` (deben vivir en `backend/*.Application` o `backend/*.Domain`).
 - Rechaza emoticones/emojis Unicode en la interfaz de usuario; exige el uso de **Font Awesome Free** (`fa-solid` / `fa-regular`) y la paleta corporativa **Minimalista Pastel** (sin gradientes estridentes ni estilos genéricos).
+- Rechaza `AllowAnyOrigin()` en CORS, símbolos de código fuera de inglés técnico y archivos temporales/locales (`appsettings.Development.json`, `*.tsbuildinfo`).
