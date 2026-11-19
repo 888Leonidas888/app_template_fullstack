@@ -32,8 +32,9 @@ Repositorio plantilla corporativo gobernado por TI para la creación de aplicaci
 6. **Cero archivos basura:** No se suben archivos ajenos al core; ante cualquier duda, el agente pregunta al usuario.
 7. **Cero exposición de datos sensibles (3 Entornos Preconfigurados bajo `ConnectionStrings__DefaultConnection`):** Ninguna credencial o secreto en el repositorio:
    * **Local:** Variable de entorno de sistema `ConnectionStrings__DefaultConnection` preconfigurada hacia SQL Server Local con autenticación integrada de Windows.
-   * **QA (Cloud Run):** Secreto `db-connection-string-qa` en **GCP Secret Manager** inyectado en `ConnectionStrings__DefaultConnection` apuntando a `BooksDb_QA`.
-   * **Producción (Cloud Run):** Secreto `db-connection-string-prod` en **GCP Secret Manager** inyectado en `ConnectionStrings__DefaultConnection` apuntando a `BooksDb_Prod` (requiere aprobación de 1 clic del Administrador de TI `888Leonidas888`).
+   * **QA (Cloud Run):** Secreto `db-connection-string-qa` en **GCP Secret Manager** inyectado en `ConnectionStrings__DefaultConnection` apuntando a `BooksDb_QA` vía túnel interno `--add-cloudsql-instances`.
+   * **Producción (Cloud Run):** Secreto `db-connection-string-prod` en **GCP Secret Manager** inyectado en `ConnectionStrings__DefaultConnection` apuntando a `BooksDb_Prod` vía túnel interno `--add-cloudsql-instances` (requiere aprobación de 1 clic del Administrador de TI `888Leonidas888`).
+   * **Lista blanca de IPs (`AllowedClientIps`):** Secreto `allowed-client-ips` en **GCP Secret Manager** inyectado en QA y Producción para restringir el consumo de la API a las IPs corporativas autorizadas.
    * **Enlaces Oficiales de QA y Producción:** Se publican automáticamente en el **Resumen de GitHub Actions (`$GITHUB_STEP_SUMMARY`)**, en la sección **Deployments** del repositorio y son entregados en el chat por el agente tras cada despliegue.
 8. **Código DRY (Don't Repeat Yourself):** Reutilización obligatoria de lógica y componentes.
 9. **Cero fallbacks silenciosos:** Prohibido ocultar errores o asumir comportamientos; ante cualquier duda técnica se consulta al usuario.

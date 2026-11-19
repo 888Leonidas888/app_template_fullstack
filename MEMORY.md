@@ -42,4 +42,5 @@
 - [x] **Tarea 8:** Exigir lógica de negocio 100% en Backend (preparado para futura unificación por microservicios) y estandarizar el Frontend con Design System Minimalista Pastel, Font Awesome Free y cero emoticones Unicode.
 - [x] **Tarea 9:** Migrar gobernanza de base de datos a **MySQL** (1 BD por área `<entorno>_<area>` + prefijo `<nombre>_` en tablas y `__EFMigrationsHistory_<nombre>`), restringir áreas permitidas a `contabilidad`, `rrhh`, `sistemas`, `comercial`, `almacen` y explicitar `ASPNETCORE_ENVIRONMENT` en `ci-cd.yml`.
 - [x] **Tarea 10:** Endurecer el template tras la auditoría: fijar `MySql.EntityFrameworkCore` y patrón `WebApplicationFactory` en `scaffold-clean-fullstack`, prohibir `AllowAnyOrigin()` en CORS, exigir inglés técnico en código, prohibir `catch {}` vacíos/fallbacks mágicos en Frontend y excluir `appsettings.Development.json` en `.gitignore`.
+- [x] **Tarea 11:** Configurar en `.github/workflows/ci-cd.yml` el túnel interno `--add-cloudsql-instances` (para cerrar `0.0.0.0/0` en Cloud SQL) e inyectar `AllowedClientIps` desde Secret Manager (`allowed-client-ips:latest`) con filtro de IP en `scaffold-clean-fullstack`.
 
