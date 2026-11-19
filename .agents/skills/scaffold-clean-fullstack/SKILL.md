@@ -40,7 +40,7 @@ Crea la solución `backend/Books.sln` (o el nombre del dominio indicado en `MEMO
 4. **`Api` (`*.Api.csproj`):**
    - Referencia a `Application` e `Infrastructure`.
    - `appsettings.json` con `"DefaultConnection": ""` (vacío por seguridad; nunca hardcodear secretos).
-   - `Program.cs` con Minimal APIs, `/health`, **CORS restringido** (prohibido `AllowAnyOrigin()`; leer orígenes de `Cors:AllowedOrigins` o permitir explícitamente el origen del frontend en `localhost` / Cloud Run del servicio) y arranque seguro en MySQL: cuando `db.Database.IsRelational()`, ejecuta `CREATE DATABASE IF NOT EXISTS \`<entorno>_<area>\`` sobre la conexión base y luego `db.Database.Migrate()`.
+   - `Program.cs` con Minimal APIs, `/health`, **CORS restringido** (prohibido `AllowAnyOrigin()`; leer orígenes de `Cors:AllowedOrigins` o permitir explícitamente el origen del frontend en `localhost` / Cloud Run del servicio), **filtro de IP opcional (`AllowedClientIps`)** (cuando `AllowedClientIps` está configurado en QA/Producción, validar la primera IP de `X-Forwarded-For` o `RemoteIpAddress` excepto en `/health` y devolver `403 Forbidden` si no coincide) y arranque seguro en MySQL: cuando `db.Database.IsRelational()`, ejecuta `CREATE DATABASE IF NOT EXISTS \`<entorno>_<area>\`` sobre la conexión base y luego `db.Database.Migrate()`.
 5. **`Tests` (`*.Tests.csproj`):**
    - Paquetes: `xunit`, `xunit.runner.visualstudio`, `Microsoft.NET.Test.Sdk`, `Microsoft.AspNetCore.Mvc.Testing` (`10.0.*`).
    - Incluye obligatoriamente `ArchitectureTests.cs` validando por reflexión que `Domain` no dependa de nada y `Application` solo dependa de `Domain`.

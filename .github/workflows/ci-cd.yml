@@ -110,8 +110,8 @@ jobs:
           region: ${{ env.REGION }}
           image: ${{ env.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY }}/${{ github.event.repository.name }}-api:${{ github.sha }}
           env_vars: ASPNETCORE_ENVIRONMENT=QA
-          secrets: ConnectionStrings__DefaultConnection=db-connection-string-qa:latest
-          flags: --allow-unauthenticated --port=8080
+          secrets: ConnectionStrings__DefaultConnection=db-connection-string-qa:latest,AllowedClientIps=allowed-client-ips:latest
+          flags: --allow-unauthenticated --port=8080 --add-cloudsql-instances=${{ secrets.GCP_PROJECT_ID }}:${{ env.REGION }}:vicoders-mysql
 
       - name: Build and Push Frontend Image (QA)
         run: |
@@ -173,8 +173,8 @@ jobs:
           region: ${{ env.REGION }}
           image: ${{ env.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY }}/${{ github.event.repository.name }}-api:${{ github.sha }}
           env_vars: ASPNETCORE_ENVIRONMENT=Production
-          secrets: ConnectionStrings__DefaultConnection=db-connection-string-prod:latest
-          flags: --allow-unauthenticated --port=8080
+          secrets: ConnectionStrings__DefaultConnection=db-connection-string-prod:latest,AllowedClientIps=allowed-client-ips:latest
+          flags: --allow-unauthenticated --port=8080 --add-cloudsql-instances=${{ secrets.GCP_PROJECT_ID }}:${{ env.REGION }}:vicoders-mysql
 
       - name: Build and Push Frontend Image (Production)
         run: |
