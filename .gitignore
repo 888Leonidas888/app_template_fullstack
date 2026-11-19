@@ -9,3 +9,5 @@ dist/
 .env.*
 coverage/
 *.tsbuildinfo
+appsettings.Development.json
+appsettings.*.local.json

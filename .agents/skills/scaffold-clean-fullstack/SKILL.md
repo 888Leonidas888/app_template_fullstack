@@ -30,7 +30,7 @@ Crea la solución `backend/Books.sln` (o el nombre del dominio indicado en `MEMO
    - Contiene `DTOs/` y `Services/` (casos de uso y reglas de negocio).
 3. **`Infrastructure` (`*.Infrastructure.csproj`):**
    - Referencia a `Domain` y `Application`.
-   - Paquetes: `Pomelo.EntityFrameworkCore.MySql` (o proveedor MySQL compatible con `.NET 10`) y `Microsoft.EntityFrameworkCore.InMemory` (`10.0.*`).
+   - Paquetes: **`MySql.EntityFrameworkCore`** (`10.0.*` o compatible con `.NET 10`, usando `UseMySQL`) y `Microsoft.EntityFrameworkCore.InMemory` (`10.0.*`).
    - Contiene `Data/AppDbContext.cs`, `Repositories/`, `Migrations/` y `DependencyInjection.cs`.
    - **Base de Datos MySQL por Área + Prefijo por App:**
      - Toma la cadena base de `ConnectionStrings:DefaultConnection` y asigna dinámicamente `Database=<entorno>_<area>` según `ASPNETCORE_ENVIRONMENT` (`local_<area>` en Development, `qa_<area>` en QA, `prod_<area>` en Production).
@@ -40,15 +40,15 @@ Crea la solución `backend/Books.sln` (o el nombre del dominio indicado en `MEMO
 4. **`Api` (`*.Api.csproj`):**
    - Referencia a `Application` e `Infrastructure`.
    - `appsettings.json` con `"DefaultConnection": ""` (vacío por seguridad; nunca hardcodear secretos).
-   - `Program.cs` con Minimal APIs, `/health`, CORS y arranque seguro en MySQL: cuando `db.Database.IsRelational()`, ejecuta `CREATE DATABASE IF NOT EXISTS \`<entorno>_<area>\`` sobre la conexión base y luego `db.Database.Migrate()`.
+   - `Program.cs` con Minimal APIs, `/health`, **CORS restringido** (prohibido `AllowAnyOrigin()`; leer orígenes de `Cors:AllowedOrigins` o permitir explícitamente el origen del frontend en `localhost` / Cloud Run del servicio) y arranque seguro en MySQL: cuando `db.Database.IsRelational()`, ejecuta `CREATE DATABASE IF NOT EXISTS \`<entorno>_<area>\`` sobre la conexión base y luego `db.Database.Migrate()`.
 5. **`Tests` (`*.Tests.csproj`):**
    - Paquetes: `xunit`, `xunit.runner.visualstudio`, `Microsoft.NET.Test.Sdk`, `Microsoft.AspNetCore.Mvc.Testing` (`10.0.*`).
    - Incluye obligatoriamente `ArchitectureTests.cs` validando por reflexión que `Domain` no dependa de nada y `Application` solo dependa de `Domain`.
-   - Incluye pruebas de integración con `WebApplicationFactory<Program>`.
+   - En pruebas de integración con `WebApplicationFactory<Program>`, configura `UseEnvironment("Development")` y reemplaza `DbContextOptions<AppDbContext>` por `UseInMemoryDatabase(...)` (o inyecta un `ConnectionStrings:DefaultConnection` dummy vía `UseSetting`) para que `Filtro TI` en GitHub Actions pase sin requerir MySQL levantado.
 
 ### Paso 2: Crear el Frontend en React + TypeScript (`frontend/`)
 1. Configura `package.json` (incluyendo `@fortawesome/fontawesome-free`), `tsconfig.json` (con `"types": ["vite/client", "vitest/globals", "@testing-library/jest-dom"]`) y `vite.config.ts`.
-2. Lee la URL del backend desde `import.meta.env.VITE_API_URL` (sin crear fallbacks silenciosos que oculten errores de red: muestra el estado de error claramente en la UI si la petición falla).
+2. Lee la URL del backend desde `import.meta.env.VITE_API_URL` (sin crear fallbacks silenciosos ni `catch {}` vacíos que oculten errores; tampoco envíes valores mágicos inventados como `-1` para campos vacíos — envía `null` o deja validar al Backend).
 3. **Cero Lógica de Negocio en Frontend:** React únicamente renderiza datos y envía formularios hacia la API; toda validación de negocio o cálculo vive en el Backend (`Application` / `Domain`).
 4. **Identidad Visual Corporativa (Minimalista Pastel + Font Awesome Free):**
    - **Cero emoticones/emojis Unicode** en toda la interfaz; usa únicamente iconos de **Font Awesome Free** (`import '@fortawesome/fontawesome-free/css/all.min.css'` y `<i className="fa-solid fa-..." />`).

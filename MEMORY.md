@@ -41,4 +41,5 @@
 - [x] **Tarea 7:** Establecer convención oficial de nombres de repositorios (`app-<area>-<nombre>`, máx. 35 caracteres) y aislamiento por esquemas SQL + Migraciones EF Core (`HasDefaultSchema` / `MigrationsHistoryTable`) para compartir la misma base de datos entre áreas.
 - [x] **Tarea 8:** Exigir lógica de negocio 100% en Backend (preparado para futura unificación por microservicios) y estandarizar el Frontend con Design System Minimalista Pastel, Font Awesome Free y cero emoticones Unicode.
 - [x] **Tarea 9:** Migrar gobernanza de base de datos a **MySQL** (1 BD por área `<entorno>_<area>` + prefijo `<nombre>_` en tablas y `__EFMigrationsHistory_<nombre>`), restringir áreas permitidas a `contabilidad`, `rrhh`, `sistemas`, `comercial`, `almacen` y explicitar `ASPNETCORE_ENVIRONMENT` en `ci-cd.yml`.
+- [x] **Tarea 10:** Endurecer el template tras la auditoría: fijar `MySql.EntityFrameworkCore` y patrón `WebApplicationFactory` en `scaffold-clean-fullstack`, prohibir `AllowAnyOrigin()` en CORS, exigir inglés técnico en código, prohibir `catch {}` vacíos/fallbacks mágicos en Frontend y excluir `appsettings.Development.json` en `.gitignore`.
 
