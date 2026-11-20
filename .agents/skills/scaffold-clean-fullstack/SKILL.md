@@ -30,7 +30,7 @@ Crea la solución `backend/Books.sln` (o el nombre del dominio indicado en `MEMO
    - Contiene `DTOs/` y `Services/` (casos de uso y reglas de negocio).
 3. **`Infrastructure` (`*.Infrastructure.csproj`):**
    - Referencia a `Domain` y `Application`.
-   - Paquetes: **`MySql.EntityFrameworkCore`** (`10.0.*` o compatible con `.NET 10`, usando `UseMySQL`) y `Microsoft.EntityFrameworkCore.InMemory` (`10.0.*`).
+   - Paquetes: **`Pomelo.EntityFrameworkCore.MySql`** (`9.0.0`, usando `UseMySql` + `MySqlConnector`, compatible de forma nativa con los Unix Sockets `/cloudsql/` de Cloud Run), `Microsoft.EntityFrameworkCore.InMemory` (`9.0.*`) y `Microsoft.EntityFrameworkCore.Design` (`9.0.*`) manteniendo `<TargetFramework>net10.0</TargetFramework>`. *(No usar `MySql.EntityFrameworkCore`/`MySql.Data` porque falla en Unix Sockets de Cloud Run con `Socket.Available`).*
    - Contiene `Data/AppDbContext.cs`, `Repositories/`, `Migrations/` y `DependencyInjection.cs`.
    - **Base de Datos MySQL por Área + Prefijo por App:**
      - Toma la cadena base de `ConnectionStrings:DefaultConnection` y asigna dinámicamente `Database=<entorno>_<area>` según `ASPNETCORE_ENVIRONMENT` (`local_<area>` en Development, `qa_<area>` en QA, `prod_<area>` en Production).
