@@ -134,6 +134,7 @@ jobs:
           service: ${{ github.event.repository.name }}-web-qa
           region: ${{ env.REGION }}
           image: ${{ env.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY }}/${{ github.event.repository.name }}-web-qa:${{ github.sha }}
+          secrets: AllowedClientIps=allowed-client-ips:latest
           flags: --allow-unauthenticated --port=8080 --service-account=cloudrun-runtime@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com
 
       - name: Configure Backend CORS for QA Frontend
@@ -205,6 +206,7 @@ jobs:
           service: ${{ github.event.repository.name }}-web-prod
           region: ${{ env.REGION }}
           image: ${{ env.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY }}/${{ github.event.repository.name }}-web-prod:${{ github.sha }}
+          secrets: AllowedClientIps=allowed-client-ips:latest
           flags: --allow-unauthenticated --port=8080 --service-account=cloudrun-runtime@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com
 
       - name: Configure Backend CORS for Production Frontend
