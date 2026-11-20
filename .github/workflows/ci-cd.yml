@@ -13,9 +13,14 @@ on:
       - 'frontend/**'
   workflow_dispatch:
 
+permissions:
+  contents: read
+  id-token: write
+
 env:
   REGION: us-central1
-  REPOSITORY: books-repo
+  REPOSITORY: stn-apps-repo
+  CLOUDSQL_INSTANCE: stn-mysql
 
 jobs:
   # =========================================================================
@@ -30,7 +35,7 @@ jobs:
 
       - name: Escaneo de Secretos Expuestos (Cero Exposición)
         run: |
-          if grep -RInE "Password\s*=|User Id\s*=|AccountKey\s*=" backend/Books.Api/appsettings*.json backend/Books.Domain backend/Books.Application; then
+          if grep -RInE "Password\s*=|User Id\s*=|AccountKey\s*=" backend/*.Api/appsettings*.json backend/*.Domain backend/*.Application 2>/dev/null; then
             echo "❌ ERROR DE SEGURIDAD: Se detectaron credenciales hardcodeadas en el código o appsettings."
             exit 1
           fi
@@ -71,7 +76,7 @@ jobs:
         run: npm run build
 
   # =========================================================================
-  # FASE 3: DESPLIEGUE CONTINUO AUTOMÁTICO A QA (Google Cloud Run)
+  # FASE 3: DESPLIEGUE CONTINUO AUTOMÁTICO A QA (Google Cloud Run + WIF OIDC)
   # =========================================================================
   deploy-qa:
     name: "Fase 3: Deploy Automático a QA (Cloud Run)"
@@ -85,10 +90,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Authenticate to Google Cloud
+      - name: Authenticate to Google Cloud (Workload Identity Federation)
         uses: google-github-actions/auth@v2
         with:
-          credentials_json: ${{ secrets.GCP_SA_KEY }}
+          workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER }}
+          service_account: ${{ secrets.GCP_DEPLOYER_SA }}
 
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
@@ -111,7 +117,7 @@ jobs:
           image: ${{ env.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY }}/${{ github.event.repository.name }}-api:${{ github.sha }}
           env_vars: ASPNETCORE_ENVIRONMENT=QA
           secrets: ConnectionStrings__DefaultConnection=db-connection-string-qa:latest,AllowedClientIps=allowed-client-ips:latest
-          flags: --allow-unauthenticated --port=8080 --add-cloudsql-instances=${{ secrets.GCP_PROJECT_ID }}:${{ env.REGION }}:vicoders-mysql
+          flags: --allow-unauthenticated --port=8080 --service-account=cloudrun-runtime@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com --add-cloudsql-instances=${{ secrets.GCP_PROJECT_ID }}:${{ env.REGION }}:${{ env.CLOUDSQL_INSTANCE }}
 
       - name: Build and Push Frontend Image (QA)
         run: |
@@ -128,11 +134,11 @@ jobs:
           service: ${{ github.event.repository.name }}-web-qa
           region: ${{ env.REGION }}
           image: ${{ env.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY }}/${{ github.event.repository.name }}-web-qa:${{ github.sha }}
-          flags: --allow-unauthenticated --port=8080
+          flags: --allow-unauthenticated --port=8080 --service-account=cloudrun-runtime@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com
 
       - name: Publicar Enlaces Oficiales de QA
         run: |
-          echo "### 🚀 Entorno QA Desplegado (Google Cloud Run)" >> $GITHUB_STEP_SUMMARY
+          echo "### Entorno QA Desplegado (Google Cloud Run)" >> $GITHUB_STEP_SUMMARY
           echo "| Componente | Enlace Oficial QA | Base de Datos (Secret Manager) |" >> $GITHUB_STEP_SUMMARY
           echo "| :--- | :--- | :--- |" >> $GITHUB_STEP_SUMMARY
           echo "| **Frontend Web (QA)** | ${{ steps.deploy-web-qa.outputs.url }} | - |" >> $GITHUB_STEP_SUMMARY
@@ -140,12 +146,12 @@ jobs:
           echo "| **Healthcheck API (QA)** | ${{ steps.deploy-api-qa.outputs.url }}/health | \`ConnectionStrings__DefaultConnection\` |" >> $GITHUB_STEP_SUMMARY
 
   # =========================================================================
-  # FASE 4: PASE A PRODUCCIÓN (Requiere Aprobación de 1 Clic del Senior TI)
+  # FASE 4: PASE A PRODUCCIÓN (1 Clic del Admin TI 888Leonidas888)
   # =========================================================================
   deploy-prod:
     name: "Fase 4: Pase a Producción (Aprobación TI)"
     needs: [deploy-qa]
-    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    if: github.event_name == 'workflow_dispatch' && github.actor == '888Leonidas888'
     runs-on: ubuntu-latest
     environment:
       name: production
@@ -154,10 +160,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Authenticate to Google Cloud
+      - name: Authenticate to Google Cloud (Workload Identity Federation)
         uses: google-github-actions/auth@v2
         with:
-          credentials_json: ${{ secrets.GCP_SA_KEY }}
+          workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER }}
+          service_account: ${{ secrets.GCP_DEPLOYER_SA }}
 
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
@@ -174,7 +181,7 @@ jobs:
           image: ${{ env.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY }}/${{ github.event.repository.name }}-api:${{ github.sha }}
           env_vars: ASPNETCORE_ENVIRONMENT=Production
           secrets: ConnectionStrings__DefaultConnection=db-connection-string-prod:latest,AllowedClientIps=allowed-client-ips:latest
-          flags: --allow-unauthenticated --port=8080 --add-cloudsql-instances=${{ secrets.GCP_PROJECT_ID }}:${{ env.REGION }}:vicoders-mysql
+          flags: --allow-unauthenticated --port=8080 --service-account=cloudrun-runtime@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com --add-cloudsql-instances=${{ secrets.GCP_PROJECT_ID }}:${{ env.REGION }}:${{ env.CLOUDSQL_INSTANCE }}
 
       - name: Build and Push Frontend Image (Production)
         run: |
@@ -191,14 +198,13 @@ jobs:
           service: ${{ github.event.repository.name }}-web-prod
           region: ${{ env.REGION }}
           image: ${{ env.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY }}/${{ github.event.repository.name }}-web-prod:${{ github.sha }}
-          flags: --allow-unauthenticated --port=8080
+          flags: --allow-unauthenticated --port=8080 --service-account=cloudrun-runtime@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com
 
       - name: Publicar Enlaces Oficiales de Producción
         run: |
-          echo "### 🏆 Entorno Producción Desplegado (Google Cloud Run)" >> $GITHUB_STEP_SUMMARY
+          echo "### Entorno Producción Desplegado (Google Cloud Run)" >> $GITHUB_STEP_SUMMARY
           echo "| Componente | Enlace Oficial Producción | Base de Datos (Secret Manager) |" >> $GITHUB_STEP_SUMMARY
           echo "| :--- | :--- | :--- |" >> $GITHUB_STEP_SUMMARY
           echo "| **Frontend Web (PROD)** | ${{ steps.deploy-web-prod.outputs.url }} | - |" >> $GITHUB_STEP_SUMMARY
           echo "| **Backend API (PROD)** | ${{ steps.deploy-api-prod.outputs.url }} | \`db-connection-string-prod:latest\` |" >> $GITHUB_STEP_SUMMARY
           echo "| **Healthcheck API (PROD)** | ${{ steps.deploy-api-prod.outputs.url }}/health | \`ConnectionStrings__DefaultConnection\` |" >> $GITHUB_STEP_SUMMARY
-
