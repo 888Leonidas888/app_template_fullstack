@@ -44,3 +44,8 @@
 - [x] **Tarea 10:** Endurecer el template tras la auditoría: fijar `MySql.EntityFrameworkCore` y patrón `WebApplicationFactory` en `scaffold-clean-fullstack`, prohibir `AllowAnyOrigin()` en CORS, exigir inglés técnico en código, prohibir `catch {}` vacíos/fallbacks mágicos en Frontend y excluir `appsettings.Development.json` en `.gitignore`.
 - [x] **Tarea 11:** Configurar en `.github/workflows/ci-cd.yml` el túnel interno `--add-cloudsql-instances` (para cerrar `0.0.0.0/0` en Cloud SQL) e inyectar `AllowedClientIps` desde Secret Manager (`allowed-client-ips:latest`) con filtro de IP en `scaffold-clean-fullstack`.
 
+### Presentación para gerencia
+
+- [x] Preparar las versiones Mermaid y HTML del flujo guiado con IA en la rama `docs/presentacion-gerencia`. Se verificó el diagrama y la vista HTML en escritorio y móvil.
+- [x] Reforzar la propuesta para gerencia en ambas versiones. Las áreas crean sus propias apps con IA siguiendo el estándar de TI, con revisión de código por un agente y despliegues automáticos en el entorno corporativo. Se verificaron ambas versiones y el diseño adaptable.
+

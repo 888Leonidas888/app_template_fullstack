@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cada área puede crear sus propias apps con IA</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: #f7f8fc;
+      color: #202940;
+      font-family: Inter, system-ui, sans-serif;
+      line-height: 1.55;
+    }
+
+    main {
+      width: min(72rem, calc(100% - 2rem));
+      margin: clamp(2rem, 4vw, 4rem) auto;
+    }
+
+    h1 {
+      max-width: 20ch;
+      margin: 0 0 0.75rem;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      line-height: 1.12;
+      letter-spacing: -0.045em;
+    }
+
+    .intro {
+      max-width: 64ch;
+      margin-bottom: 2rem;
+      font-size: 1.125rem;
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1.5rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .step {
+      position: relative;
+      padding: 1.25rem;
+      border: 1px solid #dce2eb;
+      border-radius: 1rem;
+      background: #fff;
+    }
+
+    .step:nth-child(1) { --pastel: #e5defb; }
+    .step:nth-child(2) { --pastel: #dceaff; }
+    .step:nth-child(3) { --pastel: #dcf2e7; }
+    .step:nth-child(4) { --pastel: #fbe8d7; }
+
+    .step-icon {
+      display: inline-grid;
+      width: 3rem;
+      height: 3rem;
+      place-items: center;
+      border-radius: 0.75rem;
+      background: var(--pastel);
+      font-size: 1.2rem;
+    }
+
+    .step-arrow {
+      position: absolute;
+      top: 50%;
+      left: calc(100% + 0.75rem);
+      transform: translate(-50%, -50%);
+      color: #596480;
+      font-size: 0.875rem;
+    }
+
+    h2 {
+      margin: 0.9rem 0 0.35rem;
+      font-size: 1.15rem;
+      line-height: 1.3;
+    }
+
+    p {
+      margin: 0;
+      color: #44516a;
+    }
+
+    .benefits {
+      margin-top: 1.5rem;
+      padding: 1.25rem;
+      border: 1px solid #deddf0;
+      border-radius: 1rem;
+      background: #eeedf9;
+    }
+
+    .benefits h2 { margin-top: 0; }
+
+    .benefits-list {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem 1.5rem;
+      margin: 0.75rem 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .benefits-list strong {
+      display: block;
+      margin-bottom: 0.2rem;
+    }
+
+    @media (max-width: 52rem) {
+      .flow, .benefits-list { grid-template-columns: 1fr; }
+
+      .step-arrow {
+        top: calc(100% + 0.75rem);
+        left: 50%;
+        transform: translate(-50%, -50%) rotate(90deg);
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Cada área puede crear sus propias apps con IA</h1>
+    <p class="intro">Quien conoce la necesidad crea la solución con IA y la prueba con su equipo. Así el negocio puede avanzar desde el primer día dentro del flujo de TI.</p>
+    <ol class="flow" role="list">
+      <li class="step">
+        <span class="step-icon" aria-hidden="true"><i class="fa-solid fa-laptop"></i></span>
+        <h2>1. Instala las herramientas</h2>
+        <p>Preparas tu equipo una sola vez y usas la IA para crear la app que tu área necesita.</p>
+        <i class="step-arrow fa-solid fa-arrow-right" aria-hidden="true"></i>
+      </li>
+      <li class="step">
+        <span class="step-icon" aria-hidden="true"><i class="fa-solid fa-code"></i></span>
+        <h2>2. Revisa con Copilot Review</h2>
+        <p>Un agente revisa la calidad del código y señala posibles desvíos de los lineamientos de TI.</p>
+        <i class="step-arrow fa-solid fa-arrow-right" aria-hidden="true"></i>
+      </li>
+      <li class="step">
+        <span class="step-icon" aria-hidden="true"><i class="fa-solid fa-cloud-arrow-up"></i></span>
+        <h2>3. Prueba en QA</h2>
+        <p>Al integrar los cambios, la app se despliega automáticamente a un entorno de pruebas en Google Cloud para que tu equipo la valide.</p>
+        <i class="step-arrow fa-solid fa-arrow-right" aria-hidden="true"></i>
+      </li>
+      <li class="step">
+        <span class="step-icon" aria-hidden="true"><i class="fa-solid fa-circle-check"></i></span>
+        <h2>4. Pase a producción</h2>
+        <p>Después de la validación, TI da el visto bueno y el despliegue a producción en Google Cloud se ejecuta automáticamente.</p>
+      </li>
+    </ol>
+
+    <section class="benefits" aria-labelledby="benefits-heading">
+      <h2 id="benefits-heading">¿Qué gana el negocio?</h2>
+      <ul class="benefits-list" role="list">
+        <li>
+          <strong>Más rapidez y menos esperas</strong>
+          <p>Cada área puede crear y ajustar su app directamente. Los despliegues automáticos reducen los pasos manuales.</p>
+        </li>
+        <li>
+          <strong>Un estándar de TI</strong>
+          <p>Las apps siguen el mismo flujo de trabajo y usan la arquitectura, el diseño y las tecnologías definidos por TI.</p>
+        </li>
+        <li>
+          <strong>Recursos de la empresa</strong>
+          <p>La revisión, las pruebas y la publicación se hacen dentro del entorno corporativo, con herramientas e infraestructura propias.</p>
+        </li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>
