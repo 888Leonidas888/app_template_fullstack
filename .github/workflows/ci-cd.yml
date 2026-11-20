@@ -90,11 +90,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Authenticate to Google Cloud (Workload Identity Federation)
+      - name: Authenticate to Google Cloud (Workload Identity Federation - QA)
         uses: google-github-actions/auth@v2
         with:
           workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER }}
-          service_account: ${{ secrets.GCP_DEPLOYER_SA }}
+          service_account: ${{ secrets.GCP_DEPLOYER_QA_SA }}
 
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
@@ -117,7 +117,7 @@ jobs:
           image: ${{ env.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY }}/${{ github.event.repository.name }}-api:${{ github.sha }}
           env_vars: ASPNETCORE_ENVIRONMENT=QA
           secrets: ConnectionStrings__DefaultConnection=db-connection-string-qa:latest,AllowedClientIps=allowed-client-ips:latest
-          flags: --allow-unauthenticated --port=8080 --service-account=cloudrun-runtime@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com --add-cloudsql-instances=${{ secrets.GCP_PROJECT_ID }}:${{ env.REGION }}:${{ env.CLOUDSQL_INSTANCE }}
+          flags: --allow-unauthenticated --port=8080 --service-account=cloudrun-runtime-qa@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com --add-cloudsql-instances=${{ secrets.GCP_PROJECT_ID }}:${{ env.REGION }}:${{ env.CLOUDSQL_INSTANCE }}
 
       - name: Build and Push Frontend Image (QA)
         run: |
@@ -135,7 +135,7 @@ jobs:
           region: ${{ env.REGION }}
           image: ${{ env.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY }}/${{ github.event.repository.name }}-web-qa:${{ github.sha }}
           secrets: AllowedClientIps=allowed-client-ips:latest
-          flags: --allow-unauthenticated --port=8080 --service-account=cloudrun-runtime@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com
+          flags: --allow-unauthenticated --port=8080 --service-account=cloudrun-runtime-qa@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com
 
       - name: Configure Backend CORS for QA Frontend
         run: |
@@ -168,11 +168,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Authenticate to Google Cloud (Workload Identity Federation)
+      - name: Authenticate to Google Cloud (Workload Identity Federation - PROD)
         uses: google-github-actions/auth@v2
         with:
           workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER }}
-          service_account: ${{ secrets.GCP_DEPLOYER_SA }}
+          service_account: ${{ secrets.GCP_DEPLOYER_PROD_SA }}
 
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
@@ -189,7 +189,7 @@ jobs:
           image: ${{ env.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY }}/${{ github.event.repository.name }}-api:${{ github.sha }}
           env_vars: ASPNETCORE_ENVIRONMENT=Production
           secrets: ConnectionStrings__DefaultConnection=db-connection-string-prod:latest,AllowedClientIps=allowed-client-ips:latest
-          flags: --allow-unauthenticated --port=8080 --service-account=cloudrun-runtime@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com --add-cloudsql-instances=${{ secrets.GCP_PROJECT_ID }}:${{ env.REGION }}:${{ env.CLOUDSQL_INSTANCE }}
+          flags: --allow-unauthenticated --port=8080 --service-account=cloudrun-runtime-prod@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com --add-cloudsql-instances=${{ secrets.GCP_PROJECT_ID }}:${{ env.REGION }}:${{ env.CLOUDSQL_INSTANCE }}
 
       - name: Build and Push Frontend Image (Production)
         run: |
@@ -207,7 +207,7 @@ jobs:
           region: ${{ env.REGION }}
           image: ${{ env.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY }}/${{ github.event.repository.name }}-web-prod:${{ github.sha }}
           secrets: AllowedClientIps=allowed-client-ips:latest
-          flags: --allow-unauthenticated --port=8080 --service-account=cloudrun-runtime@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com
+          flags: --allow-unauthenticated --port=8080 --service-account=cloudrun-runtime-prod@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com
 
       - name: Configure Backend CORS for Production Frontend
         run: |
