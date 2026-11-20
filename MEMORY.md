@@ -47,4 +47,5 @@
 - [x] **Tarea 13:** Estandarizar **`Pomelo.EntityFrameworkCore.MySql 9.0.0`** (`MySqlConnector`) sobre `net10.0` en `scaffold-clean-fullstack` tras validar en Cloud Run que `MySql.Data` falla sobre Unix Sockets `/cloudsql/`.
 - [x] **Tarea 14:** Inyectar automáticamente `Cors__AllowedOrigins__0` en los servicios Backend de Cloud Run (`deploy-qa` y `deploy-prod`) en `.github/workflows/ci-cd.yml` con la URL oficial del Frontend recién desplegado.
 - [x] **Tarea 15:** Inyectar `AllowedClientIps` (`allowed-client-ips:latest`) también en los servicios Frontend (`deploy-web-qa` y `deploy-web-prod`) y documentar el bloqueo por IP en Nginx dentro de `scaffold-clean-fullstack`.
+- [x] **Tarea 16:** Separar identidades WIF y Runtime por entorno (`deployer-qa` / `deployer-prod` y `cloudrun-runtime-qa` / `cloudrun-runtime-prod`) con condición OIDC por `environment` en GCP y `ci-cd.yml`.
 
