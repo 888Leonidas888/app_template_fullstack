@@ -136,6 +136,13 @@ jobs:
           image: ${{ env.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY }}/${{ github.event.repository.name }}-web-qa:${{ github.sha }}
           flags: --allow-unauthenticated --port=8080 --service-account=cloudrun-runtime@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com
 
+      - name: Configure Backend CORS for QA Frontend
+        run: |
+          gcloud run services update ${{ github.event.repository.name }}-api-qa \
+            --region=${{ env.REGION }} \
+            --update-env-vars="Cors__AllowedOrigins__0=${{ steps.deploy-web-qa.outputs.url }}" \
+            --quiet
+
       - name: Publicar Enlaces Oficiales de QA
         run: |
           echo "### Entorno QA Desplegado (Google Cloud Run)" >> $GITHUB_STEP_SUMMARY
@@ -199,6 +206,13 @@ jobs:
           region: ${{ env.REGION }}
           image: ${{ env.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY }}/${{ github.event.repository.name }}-web-prod:${{ github.sha }}
           flags: --allow-unauthenticated --port=8080 --service-account=cloudrun-runtime@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com
+
+      - name: Configure Backend CORS for Production Frontend
+        run: |
+          gcloud run services update ${{ github.event.repository.name }}-api-prod \
+            --region=${{ env.REGION }} \
+            --update-env-vars="Cors__AllowedOrigins__0=${{ steps.deploy-web-prod.outputs.url }}" \
+            --quiet
 
       - name: Publicar Enlaces Oficiales de Producción
         run: |
