@@ -45,4 +45,5 @@
 - [x] **Tarea 11:** Configurar en `.github/workflows/ci-cd.yml` el túnel interno `--add-cloudsql-instances` (para cerrar `0.0.0.0/0` en Cloud SQL) e inyectar `AllowedClientIps` desde Secret Manager (`allowed-client-ips:latest`) con filtro de IP en `scaffold-clean-fullstack`.
 - [x] **Tarea 12:** Migrar CI/CD a **Workload Identity Federation (OIDC)** sin claves JSON, usar identidad dedicada `cloudrun-runtime` con permisos granulares por recurso/secreto, habilitar repositorios privados gratuitos y configurar `deploy-prod` mediante `workflow_dispatch` exclusivo para `888Leonidas888`.
 - [x] **Tarea 13:** Estandarizar **`Pomelo.EntityFrameworkCore.MySql 9.0.0`** (`MySqlConnector`) sobre `net10.0` en `scaffold-clean-fullstack` tras validar en Cloud Run que `MySql.Data` falla sobre Unix Sockets `/cloudsql/`.
+- [x] **Tarea 14:** Inyectar automáticamente `Cors__AllowedOrigins__0` en los servicios Backend de Cloud Run (`deploy-qa` y `deploy-prod`) en `.github/workflows/ci-cd.yml` con la URL oficial del Frontend recién desplegado.
 
